@@ -4,11 +4,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useColorScheme } from "react-native";
-
+import Room from "../screens/Room";
 import Colors from "../constants/Colors";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
-
+import JoinRoom from "../screens/JoinRoom";
+import MyRoom from '../screens/MyRoom'
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -25,16 +24,17 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          ),
+          )
         }}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoNavigator}
         options={{
+          header: () => null,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          ),
+          )
         }}
       />
     </BottomTab.Navigator>
@@ -50,14 +50,13 @@ function TabBarIcon(props) {
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator();
-
 function TabOneNavigator() {
   return (
     <TabOneStack.Navigator>
       <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: "Tab One Title" }}
+        name="MyRoom"
+        component={MyRoom}
+        options={{ headerTitle: "Tab Two Title" }}
       />
     </TabOneStack.Navigator>
   );
@@ -69,9 +68,13 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+        name="JoinRoom"
+        component={JoinRoom}
         options={{ headerTitle: "Tab Two Title" }}
+      />
+      <TabTwoStack.Screen
+        name="Room"
+        component={Room}
       />
     </TabTwoStack.Navigator>
   );
