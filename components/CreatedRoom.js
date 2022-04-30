@@ -1,14 +1,10 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
-import {
-  DARK_COLOR,
-  LIGHT_DARK_COLOR,
-  LIGHT_COLOR,
-  SKY_COLOR
-} from "../constants/Colors";
+import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { BgView, Text, useTheme } from "./Themed";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import * as _ from "lodash";
 import { TeamsContext } from "../context/TeamsContext";
+import { useThemeColor } from "./Themed";
 
 const CreatedRoom = ({ room, onPress }) => {
   const {
@@ -20,47 +16,49 @@ const CreatedRoom = ({ room, onPress }) => {
     timeFrom,
     timeTo,
     location
-  } = room;
+  } = room ?? {};
+  const theme = useTheme()
+  const style = _style(theme)
   const { teams } = useContext(TeamsContext);
-  const homeTeam = teams[room.homeTeam];
-  const awayTeam = teams[room.awayTeam];
+  const homeTeam = teams?.[room?.homeTeam] ?? {};
+  const awayTeam = teams?.[room?.awayTeam] ?? {};
   const renderHeader = () => (
-    <View style={style.headerContainer}>
-      <View style={style.roomStatus}>
-        <Text style={{ color: "white" }}>{status}</Text>
-      </View>
+    <BgView type={'secondary'} style={style.headerContainer}>
+      <BgView type={'fifth'} style={style.roomStatus}>
+        <Text >{status}</Text>
+      </BgView>
       <View style={style.options}>
-        <Text style={{ fontSize: 17, color: "white" }}>
+        <Text style={{ fontSize: 17 }}>
           {(booked && "BOOKING OPTIONS") || "PERFERD OPTIONS"}
         </Text>
       </View>
-    </View>
+    </BgView>
   );
   const renderTeams = () => {
     return (
-      <View style={style.teams}>
+      <BgView type={'secondary'} style={style.teams}>
         {renderTeam(homeTeam)}
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text style={{ color: "white", fontSize: 15 }}>VS</Text>
+          <Text style={{ fontSize: 15 }}>VS</Text>
         </View>
         {!!awayTeam && renderTeam(awayTeam)}
         {!!!awayTeam && renderJoinRoomButton()}
-      </View>
+      </BgView>
     );
   };
   const renderTeam = team => (
     <View style={style.team}>
       <Image style={{ width: 40, height: 40 }} source={{ uri: team.logoUrl }} />
-      <Text style={{ color: "white", fontSize: 12, marginTop: 10 }}>
+      <Text style={{ fontSize: 12, marginTop: 10 }}>
         {team.name}
       </Text>
     </View>
   );
   const renderJoinRoomButton = () => (
     <View style={style.joinRoomButton}>
-      <Ionicons name={"non"} size={40} color={SKY_COLOR} />
+      <Ionicons name={"non"} size={40} color={theme.icon.primary} />
       <TouchableOpacity style={style.setMatchContainer}>
-        <Text style={{ color: "white" }}>Join Room</Text>
+        <Text>Join Room</Text>
       </TouchableOpacity>
     </View>
   );
@@ -77,33 +75,32 @@ const CreatedRoom = ({ room, onPress }) => {
   const renderLocation = location => {
     if (_.isArray(location))
       return location.map(location => (
-        <Text style={{ color: "white" }}>{location} </Text>
+        <Text >{location} </Text>
       ));
 
     if (location?.short_address)
-      return <Text style={{ color: "white" }}>{location.short_address}</Text>;
+      return <Text >{location.short_address}</Text>;
     return null;
   };
   const renderSettings = () => (
-    <View style={style.settings}>
+    <BgView style={style.settings}>
       <View style={style.settingsWrapper}>
         <Info
           iconProps={{
             Icon: Entypo,
             name: "location-pin",
             size: 40,
-            color: LIGHT_COLOR
+            color: theme.icon.primary
           }}
         >
           {renderLocation(location)}
         </Info>
       </View>
-    </View>
+    </BgView>
   );
-
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={style.container}>
+      <BgView style={style.container}>
         <View style={style.wrapper}>
           {renderHeader()}
           <View style={style.footer}>
@@ -111,18 +108,17 @@ const CreatedRoom = ({ room, onPress }) => {
             {renderSettings()}
           </View>
         </View>
-      </View>
+      </BgView>
     </TouchableOpacity>
   );
 };
-const style = StyleSheet.create({
+const _style = (theme) => StyleSheet.create({
   container: {
     width: "100%",
     aspectRatio: 10 / 9,
-    backgroundColor: DARK_COLOR,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: LIGHT_DARK_COLOR,
+    borderColor: theme.border.primary,
     marginTop: 15
   },
   wrapper: {
@@ -135,7 +131,6 @@ const style = StyleSheet.create({
 
   settings: {
     flex: 2,
-    backgroundColor: DARK_COLOR
   },
   settingsWrapper: {
     flex: 1,
@@ -150,12 +145,10 @@ const style = StyleSheet.create({
   },
   headerContainer: {
     flex: 1,
-    backgroundColor: LIGHT_DARK_COLOR,
     borderTopRightRadius: 5,
     flexDirection: "row"
   },
   roomStatus: {
-    backgroundColor: LIGHT_COLOR,
     borderTopLeftRadius: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -168,7 +161,6 @@ const style = StyleSheet.create({
   },
   teams: {
     flex: 1,
-    backgroundColor: LIGHT_DARK_COLOR,
     justifyContent: "center"
   },
   team: {
@@ -181,8 +173,8 @@ const style = StyleSheet.create({
     alignItems: "center"
   },
   setMatchContainer: {
-    backgroundColor: LIGHT_COLOR,
     width: "100%",
+    backgroundColor: theme.button.primary,
     justifyContent: "center",
     alignItems: "center",
     borderBottomRightRadius: 5,

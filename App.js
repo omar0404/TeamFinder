@@ -7,28 +7,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLoadedAssets } from "./hooks/useLoadedAssets";
 import Navigation from "./navigation";
 import { useColorScheme } from "react-native";
-import { Provider } from 'react-redux'
-import store from './redux/configureStore'
 
 import RoomsProvider from "./context/RoomsContext";
 import TeamsProvider from "./context/TeamsContext";
 import SessionProvider from "./context/SessionContext";
-import AsyncStorageLib from "@react-native-async-storage/async-storage";
+import { useTheme } from "./components/Themed";
 
 export default function App() {
   const isLoadingComplete = useLoadedAssets();
-  const colorScheme = useColorScheme();
+  const colors = useTheme();
 
   if (!isLoadingComplete)
     return null;
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background.secondary }}>
 
       <SessionProvider>
         <RoomsProvider>
           <TeamsProvider>
 
-            <Navigation colorScheme={colorScheme} />
+            <Navigation />
 
             <StatusBar />
           </TeamsProvider>

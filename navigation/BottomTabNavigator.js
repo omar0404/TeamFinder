@@ -8,15 +8,19 @@ import Room from "../screens/Room";
 import Colors from "../constants/Colors";
 import JoinRoom from "../screens/JoinRoom";
 import MyRoom from '../screens/MyRoom'
+import { useTheme } from "../components/Themed";
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
+  const colors = useTheme()
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      screenOptions={{ tabBarActiveTintColor: Colors[colorScheme].tint }}
+      screenOptions={{
+        tabBarActiveTintColor: colors.border,
+        headerStyle: { backgroundColor: colors.background.secondary },
+        tabBarStyle: { backgroundColor: colors.background.secondary },
+      }}
     >
       <BottomTab.Screen
         name="TabOne"
@@ -34,7 +38,7 @@ export default function BottomTabNavigator() {
           header: () => null,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
-          )
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -65,8 +69,14 @@ function TabOneNavigator() {
 const TabTwoStack = createStackNavigator();
 
 function TabTwoNavigator() {
+  const colors = useTheme()
+
   return (
-    <TabTwoStack.Navigator>
+    <TabTwoStack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.background.secondary }
+      }}
+    >
       <TabTwoStack.Screen
         name="JoinRoom"
         component={JoinRoom}

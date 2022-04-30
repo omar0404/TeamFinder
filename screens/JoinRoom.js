@@ -3,11 +3,11 @@ import { FlatList, View, StyleSheet } from "react-native";
 import CreatedRoom from "../components/CreatedRoom";
 import { RoomsContext } from "../context/RoomsContext";
 import { TeamsContext } from "../context/TeamsContext";
-import { DARK_COLOR } from "../constants/Colors";
 import { roomRef } from "../service/firebase";
 import { update } from "firebase/database";
 import * as _ from "lodash";
 import { useSession } from "../context/SessionContext";
+import { BgView } from '../components/Themed'
 const JoinRoom = ({ navigation }) => {
   const { rooms } = useContext(RoomsContext);
   const { teams } = useContext(TeamsContext);
@@ -30,23 +30,23 @@ const JoinRoom = ({ navigation }) => {
     }
 
   };
+
   if (!rooms) return null;
   return (
-    <View style={style.container}>
+    <BgView style={style.container}>
       <FlatList
         data={_.values(rooms?.[teamDivision])}
         renderItem={({ item }) => <CreatedRoom onPress={() => onJoinRoomPress(item)} room={{ ...item }} />}
       />
-    </View>
+    </BgView>
   );
 };
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLOR,
     alignItems: "center",
     justifyContent: "center",
-    padding: 15
+    padding: 15,
   }
 });
 export default JoinRoom;

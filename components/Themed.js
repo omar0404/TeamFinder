@@ -5,32 +5,29 @@ import {
   useColorScheme,
   View as DefaultView,
 } from "react-native";
-
+import * as _ from 'lodash'
 import Colors from "../constants/Colors";
-
-export function useThemeColor(props, colorName) {
+export function useTheme() {
   const theme = useColorScheme();
-  const colorFromProps = props[theme];
-
-  if (colorFromProps) {
-    return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
-  }
+  return Colors[theme]
+}
+export function useThemeColor(props, propertyPath) {
+  const theme = useColorScheme();
+  return props?.[theme] ?? _.get(Colors, `${theme}.${propertyPath}`)
 }
 
 export function Text(props) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const { style, lightColor, darkColor, type = 'primary', ...otherProps } = props;
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, `text.${type}`);
 
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 }
 
-export function View(props) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
+export function BgView(props) {
+  const { style, lightColor, darkColor, type = 'primary', ...otherProps } = props;
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "background"
+    `background.${type}`
   );
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;

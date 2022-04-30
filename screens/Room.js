@@ -2,6 +2,7 @@ import { update, remove } from 'firebase/database';
 import React, { useContext, useEffect, useReducer } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import RoomTeam from '../components/RoomTeam';
+import { BgView } from '../components/Themed';
 import { LIGHT_DARK_COLOR, DARK_COLOR } from '../constants/Colors';
 import { TeamsContext } from '../context/TeamsContext';
 import { useOnValue } from '../hooks/firebase';
@@ -65,15 +66,14 @@ const Room = ({ route }) => {
     )
   }
   return (
-    <View style={style.container}>
+    <BgView style={style.container}>
       {renderRoomTeams()}
-    </View>
+    </BgView>
   )
 }
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: LIGHT_DARK_COLOR,
   },
   teamsContainer: {
     flexDirection: "row",
