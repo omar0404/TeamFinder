@@ -1,19 +1,20 @@
 import React, { useContext } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, Image, StyleSheet, View } from "react-native";
 import CreatedRoom from "../components/CreatedRoom";
 import { RoomsContext } from "../context/RoomsContext";
 import { TeamsContext } from "../context/TeamsContext";
-import { roomRef, userRef, usersRef } from "../service/firebase";
+import { roomRef, userRef } from "../service/firebase";
 import { update } from "firebase/database";
 import * as _ from "lodash";
 import { useSession } from "../context/SessionContext";
-import { BgView } from '../components/Themed'
+import { BgView, Text } from '../components/Themed'
 const JoinRoom = ({ navigation }) => {
   const { rooms } = useContext(RoomsContext);
   const { teams } = useContext(TeamsContext);
 
   const user = useSession()
-  const { id: userTeamId, divisionRecords } = teams?.[user?.team] || {}
+  const userTeam = teams?.[user?.team] || {}
+  const { id: userTeamId, divisionRecords } = userTeam
   const { DIV: teamDivision } = divisionRecords || ""
   const onJoinRoomPress = (room) => {
     if (room.status == 'full' && (room.homeTeam != user.team && room.awayTeam != user.team))
@@ -32,7 +33,15 @@ const JoinRoom = ({ navigation }) => {
     }
     navigation.push('Room', { roomId: room.id, user, teamDivision })
   };
+  navigation.setOptions({
+    headerRight: () => (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Image style={{ width: 30, height: 30 }} source={{ uri: userTeam.logoUrl }} />
+        <Text style={{ marginHorizontal: 12 }}>{userTeam.name}</Text>
+      </View>
+    )
 
+  })
   if (!rooms) return null;
   return (
     <BgView style={style.container}>

@@ -3,7 +3,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useColorScheme } from "react-native";
 import Room from "../screens/Room";
 import Colors from "../constants/Colors";
 import JoinRoom from "../screens/JoinRoom";
@@ -15,15 +14,16 @@ export default function BottomTabNavigator() {
   const colors = useTheme()
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="My Room"
       screenOptions={{
-        tabBarActiveTintColor: colors.border,
+        tabBarActiveTintColor: colors.text.primary,
+        tabBarInactiveTintColor: colors.text.tertiary,
         headerStyle: { backgroundColor: colors.background.secondary },
-        tabBarStyle: { backgroundColor: colors.background.secondary },
+        tabBarStyle: { backgroundColor: colors.background.secondary, borderTopColor: "transparent" },
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
+        name="My Room"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => (
@@ -32,13 +32,14 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Join Room"
         component={TabTwoNavigator}
         options={{
           header: () => null,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
           ),
+          title: "Join Room"
         }}
       />
     </BottomTab.Navigator>
@@ -74,13 +75,14 @@ function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: colors.background.secondary }
+        headerStyle: { backgroundColor: colors.background.secondary, shadowOpacity: 0, },
+        headerTintColor: colors.text.primary
       }}
     >
       <TabTwoStack.Screen
         name="JoinRoom"
         component={JoinRoom}
-        options={{ headerTitle: "Tab Two Title" }}
+        options={{ headerTitle: "Join Room" }}
       />
       <TabTwoStack.Screen
         name="Room"
