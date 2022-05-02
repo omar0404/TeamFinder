@@ -41,8 +41,8 @@ const CreatedRoom = ({ room, onPress }) => {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Text style={{ fontSize: 15 }}>VS</Text>
         </View>
-        {!!awayTeam && renderTeam(awayTeam)}
-        {!!!awayTeam && renderJoinRoomButton()}
+        {awayTeam?.id && renderTeam(awayTeam)}
+        {!awayTeam?.id && renderJoinRoomButton()}
       </BgView>
     );
   };
