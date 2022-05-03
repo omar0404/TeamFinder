@@ -1,35 +1,36 @@
 import { update, remove } from 'firebase/database';
 import React, { useContext, useEffect, useReducer } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import RoomTeam from '../components/RoomTeam';
-import { BgView } from '../components/Themed';
-import { LIGHT_DARK_COLOR, DARK_COLOR } from '../constants/Colors';
+import { BgView, Text } from '../components/Themed';
 import { TeamsContext } from '../context/TeamsContext';
 import { useOnValue } from '../hooks/firebase';
 import { roomRef } from '../service/firebase';
 
 
 
-const Room = ({ route }) => {
+const Room = ({ route, navigation }) => {
   const { teams } = useContext(TeamsContext)
   const { roomId, user, teamDivision } = route.params ?? {};
   const _roomRef = roomRef(`${teamDivision}/${roomId}`)
-  const [room] = useOnValue(_roomRef)
+  const [room] = useOnValue(_roomRef, roomId)
   const { homeTeam: homeTeamId, awayTeam: awayTeamId } = room ?? {}
   const homeTeam = teams[homeTeamId]
   const awayTeam = teams[awayTeamId]
-  const isRoomOwner = room?.id == user.id
+  const isRoomOwner = room?.id == user.id;
+
   useEffect(() => {
-    return () => {
-      // remove joined team
-      // set status to empty
-      if (!isRoomOwner) {
-        remove(roomRef(`${teamDivision}/${roomId}/awayTeam`))
-        update(_roomRef, { status: 'empty' })
-      }
-    }
-  }, [])
-  if (!room) return null
+    navigation.setOptions({
+      headerRight: renderHeaderRight
+    })
+  }, [room?.id, user?.id])
+  const onLeaveRoomPress = () => {
+    // remove joined team
+    // set status to empty
+    remove(roomRef(`${teamDivision}/${roomId}/awayTeam`))
+    update(_roomRef, { status: 'empty', awayTeamReady: false })
+    navigation.goBack()
+  }
   const onReadyPress = (isHomeTeam) => {
     if (isHomeTeam) {
       update(_roomRef, {
@@ -65,6 +66,17 @@ const Room = ({ route }) => {
       </View>
     )
   }
+  function renderHeaderRight() {
+    return (
+      <View style={{ marginRight: 12 }}>
+        {user.team == awayTeam?.id && <TouchableOpacity onPress={onLeaveRoomPress}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold' }} type={'secondary'}>Leave</Text>
+        </TouchableOpacity>}
+      </View>
+    )
+  }
+  if (!room) return null
+
   return (
     <BgView style={style.container}>
       {renderRoomTeams()}
@@ -83,7 +95,6 @@ const style = StyleSheet.create({
     borderRadius: 3,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: DARK_COLOR,
     padding: 5,
     justifyContent: "center",
     marginTop: 10
