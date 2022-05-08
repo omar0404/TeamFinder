@@ -3,11 +3,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import Room from "../screens/Room";
 import Colors from "../constants/Colors";
 import JoinRoom from "../screens/JoinRoom";
-import MyRoom from '../screens/MyRoom'
+import UserRoom from '../screens/UserRoom'
 import { useTheme } from "../components/Themed";
+import JoinedRoom from "../screens/JoinedRoom";
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -26,6 +26,7 @@ export default function BottomTabNavigator() {
         name="My Room"
         component={TabOneNavigator}
         options={{
+          header: () => null,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
           )
@@ -56,11 +57,18 @@ function TabBarIcon(props) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabOneStack = createStackNavigator();
 function TabOneNavigator() {
+  const colors = useTheme()
+
   return (
-    <TabOneStack.Navigator>
+    <TabOneStack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.background.secondary, shadowOpacity: 0, },
+        headerTintColor: colors.text.primary
+      }}
+    >
       <TabOneStack.Screen
-        name="MyRoom"
-        component={MyRoom}
+        name="UserRoom"
+        component={UserRoom}
         options={{ headerTitle: "Tab Two Title" }}
       />
     </TabOneStack.Navigator>
@@ -85,8 +93,12 @@ function TabTwoNavigator() {
         options={{ headerTitle: "Join Room" }}
       />
       <TabTwoStack.Screen
-        name="Room"
-        component={Room}
+        name="JoinedRoom"
+        component={JoinedRoom}
+      />
+      <TabTwoStack.Screen
+        name="UserRoom"
+        component={UserRoom}
       />
     </TabTwoStack.Navigator>
   );

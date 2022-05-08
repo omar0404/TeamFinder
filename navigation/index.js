@@ -11,6 +11,11 @@ import colors from '../constants/Colors'
 import CreatedRoom from '../components/CreatedRoom'
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Team from "../screens/Team";
+import { useTheme } from "../components/Themed";
+const Tab = createMaterialTopTabNavigator();
+
 
 export default function Navigation() {
 
@@ -23,15 +28,21 @@ export default function Navigation() {
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
-const Stack = createStackNavigator();
 
 function RootNavigator() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
+  const colors = useTheme()
 
-    </Stack.Navigator>
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: colors.text.primary,
+        tabBarInactiveTintColor: colors.text.tertiary,
+        headerStyle: { backgroundColor: colors.background.secondary },
+        tabBarStyle: { backgroundColor: colors.background.secondary, borderTopColor: "transparent" },
+      }}
+    >
+      <Tab.Screen name="Team" component={Team} />
+      <Tab.Screen name="Find Match" component={BottomTabNavigator} />
+    </Tab.Navigator>
   );
 }

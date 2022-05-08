@@ -16,7 +16,7 @@ const UserRoom = ({ navigation }) => {
   const { createdRoom } = user || {}
   const { id: createdRoomId, DIV: teamDivision } = createdRoom || {}
 
-  const userCreatedRoom = rooms?.[teamDivision][createdRoomId]
+  const userCreatedRoom = rooms?.[teamDivision]?.[createdRoomId]
   useEffect(() => {
     navigation.setOptions({
       headerRight: renderHeaderRight

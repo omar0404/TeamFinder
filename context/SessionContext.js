@@ -7,7 +7,6 @@ export const SessionContext = createContext()
 const SessionProvider = ({ children }) => {
   const [user, isLoading, setValue] = useLocalStorage('user')
   const [_user] = useOnValue(userRef(user?.id), user?.id)
-  // console.log("_user", _user)
   const onLoginSuccess = user => {
     setValue(user)
   }
@@ -18,7 +17,7 @@ const SessionProvider = ({ children }) => {
         onLoginSuccess={onLoginSuccess}
       />
     )
-  
+
   firebaseService.setUser(_user)
   return (
     <SessionContext.Provider value={{ user: { ...(_user || {}), ...user } }}>

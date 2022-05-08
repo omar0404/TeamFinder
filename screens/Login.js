@@ -43,8 +43,9 @@ class Login extends Component {
       // AsyncStorage.setItem("userId", user[0].id);
     } else {
       Alert.alert("Phone number or password is invalid");
+      this.setState({ loading: false });
     }
-    this.setState({ loading: false });
+
   };
   renderInput = (label, key) => {
     return (

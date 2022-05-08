@@ -8,7 +8,6 @@ export const useLocalStorage = (storageKey) => {
       let data = await AsyncStorage.getItem(storageKey)
       setData(JSON.parse(data))
     } catch (error) {
-      console.log("error".error)
       setData(null)
     }
     finally {

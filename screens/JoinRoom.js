@@ -20,8 +20,10 @@ const JoinRoom = ({ navigation }) => {
   const handleJoinRoom = (room) => {
     if (room.homeTeam != user.team) {
       firebaseService.joinRoom(teamDivision, room.id)
+      navigation.push('JoinedRoom', { roomId: room.id, teamDivision })
+    } else {
+      navigation.push('UserRoom')
     }
-    navigation.push('Room', { roomId: room.id, user, teamDivision })
   }
   const onJoinRoomPress = (room) => {
     // user cannot join because  room is full and room teams aren't user team

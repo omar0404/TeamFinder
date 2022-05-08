@@ -14,17 +14,11 @@ export default (function firebaseService() {
   return {
     setUser: _user => user = _user,
     leaveRoom: (teamDivision, roomId) => {
-      console.log(teamDivision)
-      console.log(roomId)
-      console.log(user.id)
       remove(roomRef(`${teamDivision}/${roomId}/awayTeam`)).then(res => {
-        console.log('remove away team resolved')
       })
       remove(userRef(`${user.id}/joinedRoomId`)).then(res => {
-        console.log('remove joinedRoomId resolved')
       })
       update(roomRef(`${teamDivision}/${roomId}`), { status: 'empty', awayTeamReady: false }).then(res => {
-        console.log('update status resolved')
       })
     },
     joinRoom: (teamDivision, roomId) => {

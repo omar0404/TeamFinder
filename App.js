@@ -12,7 +12,7 @@ import RoomsProvider from "./context/RoomsContext";
 import TeamsProvider from "./context/TeamsContext";
 import SessionProvider from "./context/SessionContext";
 import { useTheme } from "./components/Themed";
-
+import JoinedRoomBubble from './components/JoinedRoomBubble'
 export default function App() {
   const isLoadingComplete = useLoadedAssets();
   const colors = useTheme();
@@ -27,7 +27,7 @@ export default function App() {
           <TeamsProvider>
 
             <Navigation />
-
+            {/* <JoinedRoomBubble /> */}
             <StatusBar />
           </TeamsProvider>
         </RoomsProvider>
